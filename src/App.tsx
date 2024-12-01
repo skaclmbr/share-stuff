@@ -112,12 +112,12 @@ function App() {
           <Card
           variation = 'elevated'
           key={thing.id}>
-            <Flex>
+            <Flex alignItems='flex-end'>
               <Badge size = 'small' variation = 'info'>{thing.status}</Badge>
             </Flex>
                   
-            <Heading level={5}>{thing.name}</Heading>
-            <Text>{thing.description}</Text>
+            <Heading paddingTop="15px" paddingBottom="10px" level={5}>{thing.name}</Heading>
+            <Text lineHeight="2.5em" paddingBottom="20px">{thing.description}</Text>
             <Flex direction = 'row' alignItems='flex-end'>
                 <Button>Borrow</Button>
                 <Button>Lend</Button>
