@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import type { Schema } from "../amplify/data/resource";
 import { generateClient } from "aws-amplify/data";
+import { fetchUserAttributes, signUp } from 'aws-amplify/auth';
+
+import { Authenticator } from '@aws-amplify/ui-react';
+
+await fetchUserAttributes();
 
 const client = generateClient<Schema>();
 
@@ -18,6 +23,8 @@ function App() {
   }
 
   return (
+    <Authenticator>
+      {({ signOut, user }) => (
     <main>
       <h1>My todos</h1>
       <button onClick={createTodo}>+ new</button>
@@ -34,6 +41,8 @@ function App() {
         </a>
       </div>
     </main>
+    )}
+    </Authenticator>
   );
 }
 
