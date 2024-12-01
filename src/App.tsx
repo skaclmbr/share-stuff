@@ -12,7 +12,8 @@ import {
   Card,
   Heading,
   Text,
-  Button
+  Button,
+  Badge
 } from '@aws-amplify/ui-react';
 
 import '@aws-amplify/ui-react/styles.css';
@@ -88,10 +89,6 @@ function App() {
     });
   }, []);
 
-  function createThing() {
-    client.models.Thing.create({ name: window.prompt("Thing name") });
-  }
-
   function deleteThing(id: string) {
     client.models.Thing.delete({ id })
   }
@@ -108,17 +105,17 @@ function App() {
       {/* <Button onClick={createThing}>+ new</Button> */}
       <View id='create-thing' maxWidth={'500px'}>
         <ThingCreateForm 
-        overrides ={{
-          content: {
-            label: 'Description'
-          }
-        }}/>;              
+        overrides ={{ }}/>;              
       </View>
       <Flex direction='row' alignItems='flex-start'>
         {things.map((thing) => (
           <Card
           variation = 'elevated'
           key={thing.id}>
+            <Flex>
+              <Badge size = 'small' variation = 'info'>{thing.status}</Badge>
+            </Flex>
+                  
             <Heading level={5}>{thing.name}</Heading>
             <Text>{thing.description}</Text>
             <Flex direction = 'row' alignItems='flex-end'>
@@ -130,10 +127,6 @@ function App() {
           </Card>
           ))}
           </Flex>
-      <div>
-        <br />
-        <Button onClick={signOut} >Sign out</Button>
-      </div>
     </main>
     </ThemeProvider>
   );
