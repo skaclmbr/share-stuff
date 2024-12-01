@@ -8,6 +8,7 @@ CLI profile name = amplify-policy-663873643567
 To use this profile, specify the profile name using --profile, as shown:
 aws s3 ls --profile default
 
+Resolution: To change these attributes, remove `defineAuth` from your backend, deploy, then add it back. Note that removing `defineAuth` and deploying will delete any users stored in your UserPool.
 
 ## Commands for running testing environment
 
