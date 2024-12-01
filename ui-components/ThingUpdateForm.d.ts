@@ -1,5 +1,5 @@
 import * as React from "react";
-import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { GridProps, SelectFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
 import { Thing } from "./graphql/types";
 export declare type EscapeHatchProps = {
     [elementHierarchy: string]: Record<string, unknown>;
@@ -17,15 +17,21 @@ export declare type ValidationResponse = {
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type ThingUpdateFormInputValues = {
-    content?: string;
+    name?: string;
+    description?: string;
+    status?: string;
 };
 export declare type ThingUpdateFormValidationValues = {
-    content?: ValidationFunction<string>;
+    name?: ValidationFunction<string>;
+    description?: ValidationFunction<string>;
+    status?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type ThingUpdateFormOverridesProps = {
     ThingUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
-    content?: PrimitiveOverrideProps<TextFieldProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
+    description?: PrimitiveOverrideProps<TextFieldProps>;
+    status?: PrimitiveOverrideProps<SelectFieldProps>;
 } & EscapeHatchProps;
 export declare type ThingUpdateFormProps = React.PropsWithChildren<{
     overrides?: ThingUpdateFormOverridesProps | undefined | null;

@@ -2,17 +2,20 @@ import { useEffect, useState } from "react";
 import type { Schema } from "../amplify/data/resource";
 import { generateClient } from "aws-amplify/data";
 
+import { ThingCreateForm } from "../ui-components";
 import { 
   useAuthenticator,
   ThemeProvider,
   Theme,
+  View,
   Flex,
   Card,
   Heading,
   Text,
   Button
 } from '@aws-amplify/ui-react';
-// import { CaaRecord } from "aws-cdk-lib/aws-route53";
+
+import '@aws-amplify/ui-react/styles.css';
 
 const client = generateClient<Schema>();
 
@@ -68,6 +71,13 @@ const theme: Theme = {
   },
 };
 
+function toTitleCase(str='') {
+  return str.replace(
+    /\w\S*/g,
+    text => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase()
+  );
+}
+
 function App() {
   const { user, signOut } = useAuthenticator();
   const [things, setThings] = useState<Array<Schema["Thing"]["type"]>>([]);
@@ -89,8 +99,21 @@ function App() {
   return (
     <ThemeProvider theme={theme} colorMode='light'>
     <main>
-      <h1>{user?.signInDetails?.loginId}'s things</h1>
-      <Button onClick={createThing}>+ new</Button>
+    <div>
+        <Flex direction = 'row' alignItems='flex-start'>
+      <h1>{toTitleCase(user?.signInDetails?.loginId)}'s things</h1>
+      <Button onClick={signOut} >Sign out</Button>
+      </Flex>
+      </div>
+      {/* <Button onClick={createThing}>+ new</Button> */}
+      <View id='create-thing' maxWidth={'500px'}>
+        <ThingCreateForm 
+        overrides ={{
+          content: {
+            label: 'Description'
+          }
+        }}/>;              
+      </View>
       <Flex direction='row' alignItems='flex-start'>
         {things.map((thing) => (
           <Card

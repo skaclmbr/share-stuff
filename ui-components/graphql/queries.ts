@@ -5,10 +5,12 @@
 export const getThing = /* GraphQL */ `
   query GetThing($id: ID!) {
     getThing(id: $id) {
-      content
       createdAt
+      description
       id
+      name
       owner
+      status
       updatedAt
       __typename
     }
@@ -22,10 +24,12 @@ export const listThings = /* GraphQL */ `
   ) {
     listThings(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
-        content
         createdAt
+        description
         id
+        name
         owner
+        status
         updatedAt
         __typename
       }

@@ -8,10 +8,12 @@ export const onCreateThing = /* GraphQL */ `
     $owner: String
   ) {
     onCreateThing(filter: $filter, owner: $owner) {
-      content
       createdAt
+      description
       id
+      name
       owner
+      status
       updatedAt
       __typename
     }
@@ -23,10 +25,12 @@ export const onDeleteThing = /* GraphQL */ `
     $owner: String
   ) {
     onDeleteThing(filter: $filter, owner: $owner) {
-      content
       createdAt
+      description
       id
+      name
       owner
+      status
       updatedAt
       __typename
     }
@@ -38,10 +42,12 @@ export const onUpdateThing = /* GraphQL */ `
     $owner: String
   ) {
     onUpdateThing(filter: $filter, owner: $owner) {
-      content
       createdAt
+      description
       id
+      name
       owner
+      status
       updatedAt
       __typename
     }

@@ -17,6 +17,11 @@
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
+.navbar-nav .nav-item .nav-link:hover {
+  color: black; /* Change to your desired text color on hover */
+  background-color: #f0f0f0; /* Change to your desired background color on hover */
+  /* Add any other styling you want for the hover effect */
+}
 
 @keyframes logo-spin {
   from {
@@ -33,9 +38,9 @@
   }
 }
 
-.card {
+/* .card {
   padding: 2em;
-}
+} */
 
 .read-the-docs {
   color: #888;

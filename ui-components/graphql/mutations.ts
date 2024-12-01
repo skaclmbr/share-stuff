@@ -8,10 +8,12 @@ export const createThing = /* GraphQL */ `
     $input: CreateThingInput!
   ) {
     createThing(condition: $condition, input: $input) {
-      content
       createdAt
+      description
       id
+      name
       owner
+      status
       updatedAt
       __typename
     }
@@ -23,10 +25,12 @@ export const deleteThing = /* GraphQL */ `
     $input: DeleteThingInput!
   ) {
     deleteThing(condition: $condition, input: $input) {
-      content
       createdAt
+      description
       id
+      name
       owner
+      status
       updatedAt
       __typename
     }
@@ -38,10 +42,12 @@ export const updateThing = /* GraphQL */ `
     $input: UpdateThingInput!
   ) {
     updateThing(condition: $condition, input: $input) {
-      content
       createdAt
+      description
       id
+      name
       owner
+      status
       updatedAt
       __typename
     }

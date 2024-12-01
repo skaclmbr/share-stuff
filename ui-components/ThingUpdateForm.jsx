@@ -1,7 +1,13 @@
 /* eslint-disable */
 "use client";
 import * as React from "react";
-import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
+import {
+  Button,
+  Flex,
+  Grid,
+  SelectField,
+  TextField,
+} from "@aws-amplify/ui-react";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
 import { generateClient } from "aws-amplify/api";
 import { getThing } from "./graphql/queries";
@@ -20,15 +26,23 @@ export default function ThingUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    content: "",
+    name: "",
+    description: "",
+    status: "",
   };
-  const [content, setContent] = React.useState(initialValues.content);
+  const [name, setName] = React.useState(initialValues.name);
+  const [description, setDescription] = React.useState(
+    initialValues.description
+  );
+  const [status, setStatus] = React.useState(initialValues.status);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = thingRecord
       ? { ...initialValues, ...thingRecord }
       : initialValues;
-    setContent(cleanValues.content);
+    setName(cleanValues.name);
+    setDescription(cleanValues.description);
+    setStatus(cleanValues.status);
     setErrors({});
   };
   const [thingRecord, setThingRecord] = React.useState(thingModelProp);
@@ -48,7 +62,9 @@ export default function ThingUpdateForm(props) {
   }, [idProp, thingModelProp]);
   React.useEffect(resetStateValues, [thingRecord]);
   const validations = {
-    content: [],
+    name: [],
+    description: [],
+    status: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -76,7 +92,9 @@ export default function ThingUpdateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          content: content ?? null,
+          name: name ?? null,
+          description: description ?? null,
+          status: status ?? null,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -129,29 +147,99 @@ export default function ThingUpdateForm(props) {
       {...rest}
     >
       <TextField
-        label="Content"
+        label="Name"
         isRequired={false}
         isReadOnly={false}
-        value={content}
+        value={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              content: value,
+              name: value,
+              description,
+              status,
             };
             const result = onChange(modelFields);
-            value = result?.content ?? value;
+            value = result?.name ?? value;
           }
-          if (errors.content?.hasError) {
-            runValidationTasks("content", value);
+          if (errors.name?.hasError) {
+            runValidationTasks("name", value);
           }
-          setContent(value);
+          setName(value);
         }}
-        onBlur={() => runValidationTasks("content", content)}
-        errorMessage={errors.content?.errorMessage}
-        hasError={errors.content?.hasError}
-        {...getOverrideProps(overrides, "content")}
+        onBlur={() => runValidationTasks("name", name)}
+        errorMessage={errors.name?.errorMessage}
+        hasError={errors.name?.hasError}
+        {...getOverrideProps(overrides, "name")}
       ></TextField>
+      <TextField
+        label="Description"
+        isRequired={false}
+        isReadOnly={false}
+        value={description}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              description: value,
+              status,
+            };
+            const result = onChange(modelFields);
+            value = result?.description ?? value;
+          }
+          if (errors.description?.hasError) {
+            runValidationTasks("description", value);
+          }
+          setDescription(value);
+        }}
+        onBlur={() => runValidationTasks("description", description)}
+        errorMessage={errors.description?.errorMessage}
+        hasError={errors.description?.hasError}
+        {...getOverrideProps(overrides, "description")}
+      ></TextField>
+      <SelectField
+        label="Status"
+        placeholder="Please select an option"
+        isDisabled={false}
+        value={status}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              description,
+              status: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.status ?? value;
+          }
+          if (errors.status?.hasError) {
+            runValidationTasks("status", value);
+          }
+          setStatus(value);
+        }}
+        onBlur={() => runValidationTasks("status", status)}
+        errorMessage={errors.status?.errorMessage}
+        hasError={errors.status?.hasError}
+        {...getOverrideProps(overrides, "status")}
+      >
+        <option
+          children="Available"
+          value="AVAILABLE"
+          {...getOverrideProps(overrides, "statusoption0")}
+        ></option>
+        <option
+          children="Lent"
+          value="LENT"
+          {...getOverrideProps(overrides, "statusoption1")}
+        ></option>
+        <option
+          children="Unavailable"
+          value="UNAVAILABLE"
+          {...getOverrideProps(overrides, "statusoption2")}
+        ></option>
+      </SelectField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}
