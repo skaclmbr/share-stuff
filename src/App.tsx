@@ -5,8 +5,14 @@ import { generateClient } from "aws-amplify/data";
 import { 
   useAuthenticator,
   ThemeProvider,
-  Theme, 
+  Theme,
+  Flex,
+  Card,
+  Heading,
+  Text,
+  Button
 } from '@aws-amplify/ui-react';
+// import { CaaRecord } from "aws-cdk-lib/aws-route53";
 
 const client = generateClient<Schema>();
 
@@ -64,11 +70,11 @@ const theme: Theme = {
 
 function App() {
   const { user, signOut } = useAuthenticator();
-  const [things, setTodos] = useState<Array<Schema["Thing"]["type"]>>([]);
+  const [things, setThings] = useState<Array<Schema["Thing"]["type"]>>([]);
 
   useEffect(() => {
     client.models.Thing.observeQuery().subscribe({
-      next: (data) => setTodos([...data.items]),
+      next: (data) => setThings([...data.items]),
     });
   }, []);
 
@@ -76,19 +82,34 @@ function App() {
     client.models.Thing.create({ name: window.prompt("Thing name") });
   }
 
+  function deleteThing(id: string) {
+    client.models.Thing.delete({ id })
+  }
+
   return (
     <ThemeProvider theme={theme} colorMode='light'>
     <main>
       <h1>{user?.signInDetails?.loginId}'s things</h1>
-      <button onClick={createThing}>+ new</button>
-      <ul>
+      <Button onClick={createThing}>+ new</Button>
+      <Flex direction='row' alignItems='flex-start'>
         {things.map((thing) => (
-          <li key={thing.id}>{thing.name}</li>
+          <Card
+          variation = 'elevated'
+          key={thing.id}>
+            <Heading level={5}>{thing.name}</Heading>
+            <Text>{thing.description}</Text>
+            <Flex direction = 'row' alignItems='flex-end'>
+                <Button>Borrow</Button>
+                <Button>Lend</Button>
+                <Button>Edit</Button>
+                <Button onClick={()=>deleteThing(thing.id)}>Remove</Button>
+            </Flex>
+          </Card>
           ))}
-      </ul>
+          </Flex>
       <div>
         <br />
-        <button onClick={signOut} >Sign out</button>
+        <Button onClick={signOut} >Sign out</Button>
       </div>
     </main>
     </ThemeProvider>
