@@ -112,11 +112,20 @@ function App() {
           {
             label : 'Shed',
             value : '1',
-            content: (
+            content: (<>
               <View>
                 Add all things here.
               </View>
-            )
+              <Flex direction = 'row' alignItems = 'flex-start'>
+                {things.map((thing) => (
+                  <Card
+                  variation = 'elevated'
+                  key = {thing.id}>
+                    {thing.name}
+                  </Card>
+                ))}
+              </Flex>
+            </>)
           },
           {
             label : 'Library',
