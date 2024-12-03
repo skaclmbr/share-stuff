@@ -13,10 +13,12 @@ import {
   Heading,
   Text,
   Button,
-  Badge
+  Badge,
+  Tabs
 } from '@aws-amplify/ui-react';
 
 import '@aws-amplify/ui-react/styles.css';
+import { CfnSubnetRouteTableAssociation } from "aws-cdk-lib/aws-ec2";
 
 const client = generateClient<Schema>();
 
@@ -80,6 +82,7 @@ function toTitleCase(str='') {
 }
 
 function App() {
+  const [tab, setTab] = useState('2');
   const { user, signOut } = useAuthenticator();
   const [things, setThings] = useState<Array<Schema["Thing"]["type"]>>([]);
 
@@ -102,31 +105,50 @@ function App() {
       <Button onClick={signOut} >Sign out</Button>
       </Flex>
       </div>
-      {/* <Button onClick={createThing}>+ new</Button> */}
-      <View id='create-thing' maxWidth={'500px'}>
-        <ThingCreateForm 
-        overrides ={{ }}/>;              
-      </View>
-      <Flex direction='row' alignItems='flex-start'>
-        {things.map((thing) => (
-          <Card
-          variation = 'elevated'
-          key={thing.id}>
-            <Flex alignItems='flex-end'>
-              <Badge size = 'small' variation = 'info'>{thing.status}</Badge>
-            </Flex>
-                  
-            <Heading paddingTop="15px" paddingBottom="10px" level={5}>{thing.name}</Heading>
-            <Text lineHeight="2.5em" paddingBottom="20px">{thing.description}</Text>
-            <Flex direction = 'row' alignItems='flex-end'>
-                <Button>Borrow</Button>
-                <Button>Lend</Button>
-                <Button>Edit</Button>
-                <Button onClick={()=>deleteThing(thing.id)}>Remove</Button>
-            </Flex>
-          </Card>
-          ))}
-          </Flex>
+      <Tabs
+        value={tab}
+        onValueChange = {(tab) => setTab(tab)}
+        items = {[
+          {
+            label : 'Shed',
+            value : '1',
+            content: (
+              <View>
+                Add all things here.
+              </View>
+            )
+          },
+          {
+            label : 'Library',
+            value : '2',
+            content : (<>
+              <View id='create-thing' maxWidth={'500px'}>
+                <ThingCreateForm 
+                overrides ={{ }}/>;              
+              </View>
+              <Flex direction='row' alignItems='flex-start'>
+                {things.map((thing) => (
+                  <Card
+                  variation = 'elevated'
+                  key={thing.id}>
+                    <Flex alignItems='flex-end'>
+                      <Badge size = 'small' variation = 'info'>{thing.status}</Badge>
+                    </Flex>
+                          
+                    <Heading paddingTop="15px" paddingBottom="10px" level={5}>{thing.name}</Heading>
+                    <Text lineHeight="2.5em" paddingBottom="20px">{thing.description}</Text>
+                    <Flex direction = 'row' alignItems='flex-end'>
+                        <Button>Borrow</Button>
+                        <Button>Lend</Button>
+                        <Button>Edit</Button>
+                        <Button onClick={()=>deleteThing(thing.id)}>Remove</Button>
+                    </Flex>
+                  </Card>
+                  ))}
+                  </Flex>
+              </>)
+          }
+        ]}/>
     </main>
     </ThemeProvider>
   );

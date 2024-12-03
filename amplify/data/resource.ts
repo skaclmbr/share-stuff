@@ -7,8 +7,7 @@ specifies that any user authenticated via an API key can "create", "read",
 "update", and "delete" any "Todo" records.
 =========================================================================*/
 const schema = a.schema({
-  Thing: a
-    .model({
+  Thing: a.model({
       name: a.string(),
       description: a.string(),
       status: a.enum([
@@ -16,8 +15,11 @@ const schema = a.schema({
         "LENT",
         "UNAVAILABLE"
       ])
-    })
-    .authorization(allow => [allow.owner()]),
+    }).authorization(
+      allow => [
+        allow.authenticated().to(['read']),
+        allow.owner()
+      ]),
 });
 
 export type Schema = ClientSchema<typeof schema>;
