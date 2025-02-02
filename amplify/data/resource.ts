@@ -20,6 +20,20 @@ const schema = a.schema({
         allow.authenticated().to(['read']),
         allow.owner()
       ]),
+  // EchoResponse: a.customType({
+  //   content: a.string(),
+  //   executionDuration: a.float()
+  // }),
+  // echo: a
+  //   .query()
+
+  //   .arguments({
+  //     content: a.string()
+  //   })
+
+  //   .returns(a.ref("EchoResponse"))
+
+  //   .authorization(allow => [allow.authenticated()])
 });
 
 export type Schema = ClientSchema<typeof schema>;

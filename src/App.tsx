@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
+import type { SelectionSet } from "aws-amplify/data";
 import type { Schema } from "../amplify/data/resource";
 import { generateClient } from "aws-amplify/data";
+import { fetchUserAttributes } from 'aws-amplify/auth';
+
+// await fetchUserAttributes();
 
 import { ThingCreateForm } from "../ui-components";
 import { 
@@ -18,7 +22,7 @@ import {
 } from '@aws-amplify/ui-react';
 
 import '@aws-amplify/ui-react/styles.css';
-import { CfnSubnetRouteTableAssociation } from "aws-cdk-lib/aws-ec2";
+// import { CfnSubnetRouteTableAssociation } from "aws-cdk-lib/aws-ec2";
 
 const client = generateClient<Schema>();
 
@@ -82,10 +86,12 @@ function toTitleCase(str='') {
 }
 
 function App() {
-  const [tab, setTab] = useState('2');
+  const [ tab, setTab ] = useState('2');
   const { user, signOut } = useAuthenticator();
-  const [things, setThings] = useState<Array<Schema["Thing"]["type"]>>([]);
 
+  type Thing = Schema['Thing']['type'];
+  const [ things, setThings ] = useState<Thing[]>([]);
+  
   useEffect(() => {
     client.models.Thing.observeQuery().subscribe({
       next: (data) => setThings([...data.items]),
@@ -96,11 +102,31 @@ function App() {
     client.models.Thing.delete({ id })
   }
 
+  // const getPreferredUsername = async() => {
+  //   try {
+  //     const userAttributes = await fetchUserAttributes();
+  //     return userAttributes.preferred_username;
+  //   }
+  //   catch(e) {
+  //     console.log(e);
+  //     return "Not Found";
+  //   }
+  // }
+  const printUserAttributes = async() => {
+    try{
+      const userAttributes = await fetchUserAttributes();
+      console.log('nickname:', userAttributes.preferred_username);
+    }
+    catch(e) { console.log(e)};
+  }
+
   return (
     <ThemeProvider theme={theme} colorMode='light'>
     <main>
     <div>
-        <Flex direction = 'row' alignItems='flex-start'>
+      <Button onClick={printUserAttributes}>Print Attributes</Button>
+      <Flex direction = 'row' alignItems='flex-start'>
+      {/* <h1>{toTitleCase(getPreferredUsername)}'s things</h1> */}
       <h1>{toTitleCase(user?.signInDetails?.loginId)}'s things</h1>
       <Button onClick={signOut} >Sign out</Button>
       </Flex>
@@ -122,6 +148,7 @@ function App() {
                   variation = 'elevated'
                   key = {thing.id}>
                     {thing.name}
+                    <Badge>{thing.owner}</Badge>
                   </Card>
                 ))}
               </Flex>
