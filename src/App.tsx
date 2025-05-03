@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import type { SelectionSet } from "aws-amplify/data";
-import type { Schema } from "../amplify/data/resource";
+// import type { SelectionSet } from "aws-amplify/data";
 import { generateClient } from "aws-amplify/data";
+import type { Schema } from "../amplify/data/resource";
 import { fetchUserAttributes } from 'aws-amplify/auth';
 
 // await fetchUserAttributes();
@@ -25,6 +25,10 @@ import '@aws-amplify/ui-react/styles.css';
 // import { CfnSubnetRouteTableAssociation } from "aws-cdk-lib/aws-ec2";
 
 const client = generateClient<Schema>();
+type Thing = Schema['Thing']['type'];
+// const [ things, setThings ] = useState<Thing[]>([]);
+
+const { data: things, errors } = await client.models.Thing.list({});
 
 // THEME DEFINITION
 const theme: Theme = {
@@ -89,14 +93,12 @@ function App() {
   const [ tab, setTab ] = useState('2');
   const { user, signOut } = useAuthenticator();
 
-  type Thing = Schema['Thing']['type'];
-  const [ things, setThings ] = useState<Thing[]>([]);
   
-  useEffect(() => {
-    client.models.Thing.observeQuery().subscribe({
-      next: (data) => setThings([...data.items]),
-    });
-  }, []);
+  // useEffect(() => {
+  //   client.models.Thing.observeQuery().subscribe({
+  //     next: (data) => setThings([...data.items]),
+  //   });
+  // }, []);
 
   function deleteThing(id: string) {
     client.models.Thing.delete({ id })
